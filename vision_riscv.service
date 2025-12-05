@@ -1,0 +1,20 @@
+[Unit]
+Description=Servicio de Detección MNIST RISC-V y Morse
+# Asegura que el servicio se inicie después de que la red esté disponible
+After=network.target
+
+[Service]
+Type=simple
+# CRÍTICO: Comando de inicio. Usa la ruta completa al intérprete y al script.
+ExecStart=/usr/bin/python3 /opt/vision_riscv/main_listener.py
+# El script necesita permisos de root para acceder directamente al GPIO del ker>
+User=root
+# Si el script falla (por ejemplo, sys.exit(1) en caso de error crítico), syste>
+Restart=always
+# Reinicia el servicio 2 segundos después de un fallo (cumple con REQ-NF05)
+RestartSec=2
+
+[Install]
+# El servicio debe iniciarse cuando el sistema ha alcanzado el estado multi-usu>
+WantedBy=multi-user.target
+
